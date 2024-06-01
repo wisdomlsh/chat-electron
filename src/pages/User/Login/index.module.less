@@ -1,0 +1,70 @@
+@--title-color: #fff;
+@--title-size: 24px;
+
+
+
+
+
+.container {
+  display: flex;
+  flexDirection: column;
+  height: 100vh;
+  overflow: auto;
+  background: rgb(25 25 25);
+
+  :global {
+    .ant-pro-form-login-container {
+      justify-content: center;
+      gap: 100px;
+    }
+  }
+}
+
+.form_container {
+  padding: 32px 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 33%;
+}
+
+.form_title {
+  height: 44px;
+  font-size: 36px;
+  font-weight: 800;
+  color: @--title-color;
+  display: flex;
+  align-items: center;
+  gap:4px;
+  user-select: none;
+  &::after {
+    content:'';
+    display: block;
+    width: @--title-size;
+    height: @--title-size;
+    border-radius: 50%;
+    background: @--title-color;
+  }
+}
+
+.lang {
+  width: 42px;
+  height: 42px;
+  position: fixed;
+  right: 16px;
+  color: white;
+
+
+}
+
+
+.form_btn {
+  width: 70%;
+  color: #000;
+  background: @--title-color;
+  font-weight: 500;
+  font-size: 14px;
+  height: 34px;
+}
