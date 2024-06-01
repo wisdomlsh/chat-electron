@@ -1,7 +1,6 @@
-import { login } from "@/services/ant-design-pro/api";
 import { history, SelectLang, useIntl, useModel } from "@umijs/max";
-import { Alert, message } from "antd";
-
+import { Alert } from "antd";
+import Typed from "typed.js";
 import React, { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 
@@ -17,7 +16,6 @@ const Lang = () => {
     </div>
   );
 };
-
 const LoginMessage: React.FC<{
   content: string;
 }> = ({ content }) => {
@@ -34,70 +32,55 @@ const LoginMessage: React.FC<{
 };
 
 const Login: React.FC = () => {
-  const [userLoginState, setUserLoginState] = useState<API.LoginResult>({});
-  const [type, setType] = useState<string>("account");
   const { initialState, setInitialState } = useModel("@@initialState");
   const [init, setInit] = useState(false);
+  // @ts-ignore
 
   const intl = useIntl();
-
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-    if (userInfo) {
-      flushSync(() => {
-        setInitialState((s) => ({
-          ...s,
-          currentUser: userInfo,
-        }));
-      });
-    }
+  const fetchUserInfo = async (user: any) => {
+    flushSync(() => {
+      setInitialState((s) => ({
+        ...s,
+        currentUser: user,
+      }));
+    });
   };
 
-  const handleSubmit = async (values: API.LoginParams) => {
-    try {
-      // 登录
-      const msg = await login({ ...values, type });
-      if (msg.status === "ok") {
-        const defaultLoginSuccessMessage = intl.formatMessage({
-          id: "pages.login.success",
-          defaultMessage: "登录成功！",
-        });
-        message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo();
-        const urlParams = new URL(window.location.href).searchParams;
-        history.push(urlParams.get("redirect") || "/");
-        return;
-      }
-      console.log(msg);
-      // 如果失败去设置用户错误信息
-      setUserLoginState(msg);
-    } catch (error) {
-      const defaultLoginFailureMessage = intl.formatMessage({
-        id: "pages.login.failure",
-        defaultMessage: "登录失败，请重试！",
-      });
-      console.log(error);
-      message.error(defaultLoginFailureMessage);
-    }
+  const handleGoogleLoginClick = () => {
+    electron.ipcRenderer.send("login");
   };
-  const { status, type: loginType } = userLoginState;
 
-  const particlesLoaded = (container: any) => {
-    console.log(container);
-  };
+  // electron?.ipcRenderer.on(
+  //   "login-success",
+  //   async (event: any, token: string) => {
+  //     if (token) {
+  //       const defaultLoginSuccessMessage = intl.formatMessage({
+  //         id: "pages.login.success",
+  //         defaultMessage: "登录成功！",
+  //       });
+  //       message.success(defaultLoginSuccessMessage);
+  //       await fetchUserInfo({ name: "lishuo" });
+  //       const urlParams = new URL(window.location.href).searchParams;
+  //       history.push(urlParams.get("redirect") || "/");
+  //       ipcRenderer.send("isLogin");
+  //       return;
+  //     }
+  //   }
+  // );
 
   useEffect(() => {
     initParticlesEngine(async (engine) => {
-      // you can initiate the tsParticles instance (engine) here, adding custom shapes or presets
-      // this loads the tsparticles package bundle, it's the easiest method for getting everything ready
-      // starting from v2 you can add only the features you need reducing the bundle size
-      //await loadAll(engine);
-      //await loadFull(engine);
       await loadSlim(engine);
-      //await loadBasic(engine);
     }).then(() => {
       setInit(true);
     });
+
+    new Typed("#chat", {
+      strings: ["Chat-Electron"],
+      typeSpeed: 50,
+    });
+    fetchUserInfo({ name: "lishuo" });
+    history.push("/");
   }, []);
 
   return (
@@ -105,7 +88,6 @@ const Login: React.FC = () => {
       {init && (
         <Particles
           id="tsparticles"
-          particlesLoaded={particlesLoaded}
           options={{
             fpsLimit: 120,
             interactivity: {
@@ -172,11 +154,14 @@ const Login: React.FC = () => {
           }}
         />
       )}
-
       {/*<Lang />*/}
       <div className={styles.form_container}>
-        <div className={styles.form_title}>Chat-Electron</div>
-        <IconButton text={"使用Google操作"} className={styles.form_btn} />
+        <div id="chat" className={styles.form_title}></div>
+        <IconButton
+          onClick={handleGoogleLoginClick}
+          text={"使用Google操作"}
+          className={styles.form_btn}
+        />
       </div>
     </div>
   );

@@ -27,7 +27,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 33%;
+  gap: 20px;
 }
 
 .form_title {
@@ -39,13 +39,17 @@
   align-items: center;
   gap:4px;
   user-select: none;
+
   &::after {
     content:'';
-    display: block;
     width: @--title-size;
     height: @--title-size;
+    display: block;
     border-radius: 50%;
     background: @--title-color;
+    margin-top: 5px;
+    animation: textAnimation 1.8s linear infinite;
+
   }
 }
 
@@ -67,4 +71,19 @@
   font-weight: 500;
   font-size: 14px;
   height: 34px;
+}
+
+@keyframes textAnimation {
+  0% {
+    transform: scale(.7);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(.7);
+  }
+
 }

@@ -18,7 +18,7 @@ export * from '/Users/lishuo/Desktop/lishuo/chat-electron/src/.umi/plugin-reques
 export { createBrowserHistory, createHashHistory, createMemoryHistory, Helmet, HelmetProvider, createSearchParams, generatePath, matchPath, matchRoutes, Navigate, NavLink, Outlet, resolvePath, useLocation, useMatch, useNavigate, useOutlet, useOutletContext, useParams, useResolvedPath, useRoutes, useSearchParams, useAppData, useClientLoaderData, useRouteProps, useSelectedRoutes, useServerLoaderData, renderClient, __getRoot, Link, useRouteData, __useFetcher, withRouter } from '/Users/lishuo/Desktop/lishuo/chat-electron/node_modules/.pnpm/@umijs+renderer-react@4.2.8_react-dom@18.1.0_react@18.1.0__react@18.1.0/node_modules/@umijs/renderer-react';
 export type { History } from '/Users/lishuo/Desktop/lishuo/chat-electron/node_modules/.pnpm/@umijs+renderer-react@4.2.8_react-dom@18.1.0_react@18.1.0__react@18.1.0/node_modules/@umijs/renderer-react'
 // umi/client/client/plugin
-export { ApplyPluginsType, PluginManager } from '/Users/lishuo/Desktop/lishuo/chat-electron/node_modules/.pnpm/umi@4.2.8_@babel+core@7.4.5_@types+node@20.13.0_@types+react@18.3.3_eslint@8.35.0_jest@29.7.0_wu643mu4qvv5ed6marxuod3oem/node_modules/umi/client/client/plugin.js';
+export { ApplyPluginsType, PluginManager } from '/Users/lishuo/Desktop/lishuo/chat-electron/node_modules/.pnpm/umi@4.2.8_@babel+core@7.24.6_@types+node@20.13.0_@types+react@18.3.3_eslint@8.35.0_jest@29.7._cpp6smmapi2kuvhz4wjvjt22ou/node_modules/umi/client/client/plugin.js';
 export { history, createHistory } from './core/history';
 export { terminal } from './core/terminal';
 // react ssr
