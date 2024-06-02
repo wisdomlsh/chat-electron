@@ -6,6 +6,7 @@ export { defineApp } from './core/defineApp'
 export type { RuntimeConfig } from './core/defineApp'
 // plugins
 export { Access, useAccess, useAccessMarkedRoutes } from '/Users/lishuo/Desktop/lishuo/chat-electron/src/.umi/plugin-access';
+export { Icon } from '/Users/lishuo/Desktop/lishuo/chat-electron/src/.umi/plugin-icons';
 export { addLocale, setLocale, getLocale, getIntl, useIntl, injectIntl, formatMessage, FormattedMessage, getAllLocales, FormattedDate, FormattedDateParts, FormattedDisplayName, FormattedHTMLMessage, FormattedList, FormattedNumber, FormattedNumberParts, FormattedPlural, FormattedRelativeTime, FormattedTime, FormattedTimeParts, IntlProvider, RawIntlProvider, SelectLang } from '/Users/lishuo/Desktop/lishuo/chat-electron/src/.umi/plugin-locale';
 export { Provider, useModel } from '/Users/lishuo/Desktop/lishuo/chat-electron/src/.umi/plugin-model';
 export { useRequest, UseRequestProvider, request, getRequestInstance } from '/Users/lishuo/Desktop/lishuo/chat-electron/src/.umi/plugin-request';

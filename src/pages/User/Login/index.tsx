@@ -47,7 +47,7 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLoginClick = () => {
-    electron.ipcRenderer.send("login");
+    // electron.ipcRenderer.send("login");
   };
 
   // electron?.ipcRenderer.on(
@@ -156,7 +156,7 @@ const Login: React.FC = () => {
       )}
       {/*<Lang />*/}
       <div className={styles.form_container}>
-        <div id="chat" className={styles.form_title}></div>
+        <div id="chat" className={styles.form_title} />
         <IconButton
           onClick={handleGoogleLoginClick}
           text={"使用Google操作"}

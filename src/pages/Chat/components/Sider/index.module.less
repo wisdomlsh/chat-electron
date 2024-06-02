@@ -1,0 +1,50 @@
+.sider_container {
+  width: 260px;
+  height: 100%;
+  background: #f9f9f9;
+  transition: width .2s ease-in-out;
+  position: relative;
+}
+
+.sider_container_active {
+  width: 0;
+  visibility: hidden;
+}
+
+.sider_footer {
+  flex: 1;
+}
+.sider_user {
+  background: transparent;
+
+  &:hover {
+    background: var(--chat--gray-100);
+  }
+}
+
+
+.history_item {
+  width: 100%;
+  background: #ececec;
+  padding: .5rem;
+  border-radius: .5rem;
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  &_name {
+    width: 175px;
+    white-space: normal;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (max-width: 800px) {
+  .sider_container {
+    width: 0;
+    visibility: hidden;
+  }
+
+}

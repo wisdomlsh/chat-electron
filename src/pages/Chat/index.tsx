@@ -1,5 +1,8 @@
 import { useModel } from "@umijs/max";
-import { Input, theme } from "antd";
+import ChatLayout from "./components/ChatLayout";
+
+import { theme } from "antd";
+
 import React from "react";
 
 const Chat: React.FC = () => {
@@ -7,10 +10,7 @@ const Chat: React.FC = () => {
   const { initialState } = useModel("@@initialState");
   return (
     <>
-      <div className="flex flex-col h-full relative ">
-        <main className="flex-1">3123123</main>
-        <Input style={{ height: 100 }} />
-      </div>
+      <ChatLayout />
     </>
   );
 };

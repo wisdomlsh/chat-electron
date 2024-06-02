@@ -15,12 +15,13 @@ const CLIENT_ID =
 const CLIENT_SECRET = "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";
 const REDIRECT_URI = "http://localhost:8000";
 
+// 创建主进程
 function createMainWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
-    resizable: false, // 禁止调整窗口大小
-    maximizable: false, // 禁止最大化
+    resizable: true, // 禁止调整窗口大小
+    maximizable: true, // 禁止最大化
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       nodeIntegration: false,
@@ -47,6 +48,7 @@ function createMainWindow() {
   // loadToken();
 }
 
+// 创建登陆跳转窗口
 function createAuthWindow() {
   authWindow = new BrowserWindow({
     width: 800,
