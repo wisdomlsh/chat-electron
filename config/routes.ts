@@ -30,7 +30,7 @@ export default [
 
   {
     path: "/",
-    redirect: "/Chat",
+    redirect: "/chat",
   },
   {
     path: "*",

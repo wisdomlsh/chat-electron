@@ -36,7 +36,7 @@ function createMainWindow() {
   mainWindow.loadURL("http://localhost:8000/");
 
   // 打开调试.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   ipcMain.on("isLogin", () => {
     console.log(123);

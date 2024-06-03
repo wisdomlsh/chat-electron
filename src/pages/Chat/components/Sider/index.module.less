@@ -22,12 +22,27 @@
   }
 }
 
+.sider_edit {
+  visibility: hidden;
+}
+
+
 
 .history_item {
   width: 100%;
-  background: #ececec;
+  cursor: pointer;
   padding: .5rem;
   border-radius: .5rem;
+
+
+
+  &:hover .sider_edit {
+    visibility: visible;
+  }
+  &:hover  {
+    background: #ececec;
+  }
+
   a {
     color: inherit;
     text-decoration: inherit;
@@ -39,6 +54,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+.history_item_active {
+  background: #ececec;
 }
 
 @media (max-width: 800px) {

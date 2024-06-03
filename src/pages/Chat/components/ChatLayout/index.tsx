@@ -8,9 +8,7 @@ const { TextArea } = Input;
 
 const ChatLayout: React.FC = () => (
   <div className="flex h-full w-full">
-    {/*<div className={styles.sider}>*/}
     <Sider />
-    {/*</div>*/}
     <div className=" flex flex-1 justify-center bg-white">
       <div
         className={`flex flex-col h-full w-8/12 relative p-4 bg-white ${styles.chat_body}`}
