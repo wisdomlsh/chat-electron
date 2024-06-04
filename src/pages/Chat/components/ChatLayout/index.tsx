@@ -4,6 +4,9 @@ import Sider from "../Sider";
 import _Chat from "../_Chat";
 
 import { Icon } from "@umijs/max";
+import "@/styles/markdown.less";
+import "@/styles/highlight.less";
+
 import styles from "./index.module.less";
 
 const { TextArea } = Input;

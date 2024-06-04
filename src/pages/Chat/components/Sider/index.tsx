@@ -43,11 +43,15 @@ function Sider(props: IProps) {
       }`}
     >
       <div className="p-3 flex flex-col h-full">
-        <div className="h-14 flex items-center cursor-pointer">
+        <div className="h-14 flex items-center cursor-pointer p-2">
           <span onClick={handleSiderClick}>
-            <Icon icon="local:sider" />
+            <Icon icon="local:sider" className="w-2" />
           </span>
         </div>
+        <Button type="text" className="flex items-center my-3.5 p-2 gap-2">
+          <Icon icon="local:chat" />
+          <span>ChatGpt</span>
+        </Button>
         <div className="flex-1 flex flex-col justify-between">
           <div>
             {chatSession.sessions.map((v: any, index: number) => {

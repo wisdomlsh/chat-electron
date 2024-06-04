@@ -35,6 +35,27 @@ function createEmptySession(): ChatSession {
         streaming: false,
         id: window.crypto.randomUUID(),
       },
+      {
+        content: "你好，我是ChatGpt",
+        role: "user",
+        date: Date.now(),
+        streaming: false,
+        id: window.crypto.randomUUID(),
+      },
+      {
+        content:
+          '当然，以下是一个简单的JavaScript代码段，用于输出"Hello, World!"到控制台：\n' +
+          "\n" +
+          "```javascript\n" +
+          'console.log("Hello, World!");\n' +
+          "```\n" +
+          "\n" +
+          "希望这段代码对你有帮助。如果你有任何其他的JavaScript代码需求或其他问题，请随时告诉我。我会尽力为你提供帮助。",
+        role: "assistant",
+        date: Date.now(),
+        streaming: false,
+        id: window.crypto.randomUUID(),
+      },
     ],
     lastUpdate: Date.now(),
   };

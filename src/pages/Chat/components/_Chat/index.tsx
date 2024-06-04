@@ -13,7 +13,6 @@ function _Chat(props: IProps) {
     <>
       <main className={styles._chat_container}>
         {session.messages.map((message) => {
-          console.log(message);
           const isUser = message.role === "user";
           return (
             <Fragment key={message.id}>

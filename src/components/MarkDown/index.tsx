@@ -1,5 +1,4 @@
 import ReactMarkdown from "react-markdown";
-// import "katex/dist/katex.min.css";
 import RemarkMath from "remark-math";
 import RemarkBreaks from "remark-breaks";
 import RehypeKatex from "rehype-katex";
@@ -8,6 +7,7 @@ import RehypeHighlight from "rehype-highlight";
 import React, { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import mermaid from "mermaid";
 import { useDebouncedCallback } from "use-debounce";
+import CopyBtn from "@/components/CopyBtn";
 
 export function Mermaid(props: { code: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -57,7 +57,8 @@ export function Mermaid(props: { code: string }) {
 export function PreCode(props: { children: any }) {
   const ref = useRef<HTMLPreElement>(null);
   const refText = ref.current?.innerText;
-  const [mermaidCode, setMermaidCode] = useState("");
+  const [mermaidCode, setMermaidCode] = useState<string>("");
+  const [language, setLanguage] = useState<string>("");
 
   const renderMermaid = useDebouncedCallback(() => {
     if (!ref.current) return;
@@ -72,21 +73,34 @@ export function PreCode(props: { children: any }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refText]);
 
+  useEffect(() => {
+    if (ref.current) {
+      const className = ref.current.querySelector("code")?.className || "";
+      const langMatch = className.match(/language-(\w+)/);
+      setLanguage(langMatch ? langMatch[1] : "plaintext");
+    }
+    console.log(ref.current);
+  }, []);
+
   return (
     <>
       {mermaidCode.length > 0 && (
         <Mermaid code={mermaidCode} key={mermaidCode} />
       )}
       <pre ref={ref}>
-        <span
-          className="copy-code-button"
-          onClick={() => {
-            if (ref.current) {
-              const code = ref.current.innerText;
-              // copyToClipboard(code);
-            }
-          }}
-        ></span>
+        <CopyBtn
+          language={language}
+          text={ref.current?.children[1]?.innerText}
+        />
+        {/*<span*/}
+        {/*  className="copy-code-button"*/}
+        {/*  onClick={() => {*/}
+        {/*    if (ref.current) {*/}
+        {/*      const code = ref.current.innerText;*/}
+        {/*      // copyToClipboard(code);*/}
+        {/*    }*/}
+        {/*  }}*/}
+        {/*></span>*/}
         {props.children}
       </pre>
     </>
