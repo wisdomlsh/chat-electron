@@ -24,7 +24,7 @@ export default [
   },
   {
     path: "/chat",
-    name: "Chat",
+    // name: "Chat",
     component: "./Chat",
   },
 

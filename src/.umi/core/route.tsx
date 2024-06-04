@@ -4,7 +4,7 @@
 import React from 'react';
 
 export async function getRoutes() {
-  const routes = {"1":{"path":"/user","layout":false,"id":"1"},"2":{"name":"login","path":"/user/login","parentId":"1","id":"2"},"3":{"path":"/chat","name":"Chat","parentId":"ant-design-pro-layout","id":"3"},"4":{"path":"/","redirect":"/chat","parentId":"ant-design-pro-layout","id":"4"},"5":{"path":"*","layout":false,"id":"5"},"ant-design-pro-layout":{"id":"ant-design-pro-layout","path":"/","isLayout":true},"umi/plugin/openapi":{"path":"/umi/plugin/openapi","id":"umi/plugin/openapi"}} as const;
+  const routes = {"1":{"path":"/user","layout":false,"id":"1"},"2":{"name":"login","path":"/user/login","parentId":"1","id":"2"},"3":{"path":"/chat","parentId":"ant-design-pro-layout","id":"3"},"4":{"path":"/","redirect":"/chat","parentId":"ant-design-pro-layout","id":"4"},"5":{"path":"*","layout":false,"id":"5"},"ant-design-pro-layout":{"id":"ant-design-pro-layout","path":"/","isLayout":true},"umi/plugin/openapi":{"path":"/umi/plugin/openapi","id":"umi/plugin/openapi"}} as const;
   return {
     routes,
     routeComponents: {

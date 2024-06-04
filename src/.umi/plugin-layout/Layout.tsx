@@ -84,6 +84,9 @@ export default (props: any) => {
   "navTheme": "light",
   "colorPrimary": "#1890ff",
   "layout": "side",
+  "menu": {
+    "locale": false
+  },
   "contentWidth": "Fluid",
   "fixedHeader": false,
   "fixSiderbar": true,

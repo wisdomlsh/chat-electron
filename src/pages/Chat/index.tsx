@@ -8,6 +8,7 @@ import React from "react";
 const Chat: React.FC = () => {
   const { token } = theme.useToken();
   const { initialState } = useModel("@@initialState");
+
   return (
     <>
       <ChatLayout />

@@ -39,7 +39,6 @@ function createMainWindow() {
   // mainWindow.webContents.openDevTools();
 
   ipcMain.on("isLogin", () => {
-    console.log(123);
     mainWindow.setResizable(true);
     mainWindow.setMaximizable(true);
   });

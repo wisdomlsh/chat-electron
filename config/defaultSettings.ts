@@ -11,6 +11,9 @@ const Settings: ProLayoutProps & {
   // 拂晓蓝
   colorPrimary: "#1890ff",
   layout: "side",
+  menu: {
+    locale: false,
+  },
   contentWidth: "Fluid",
   fixedHeader: false,
   fixSiderbar: true,

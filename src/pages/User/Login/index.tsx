@@ -1,8 +1,9 @@
 import { history, SelectLang, useIntl, useModel } from "@umijs/max";
 import { Alert } from "antd";
 import Typed from "typed.js";
-import React, { useEffect, useState } from "react";
 import { flushSync } from "react-dom";
+
+import React, { useEffect, useState } from "react";
 
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
@@ -35,7 +36,7 @@ const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel("@@initialState");
   const [init, setInit] = useState(false);
   // @ts-ignore
-
+  // const { ipcRenderer } = electron;
   const intl = useIntl();
   const fetchUserInfo = async (user: any) => {
     flushSync(() => {
@@ -47,26 +48,23 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLoginClick = () => {
-    // electron.ipcRenderer.send("login");
+    // ipcRenderer.send("login");
   };
 
-  // electron?.ipcRenderer.on(
-  //   "login-success",
-  //   async (event: any, token: string) => {
-  //     if (token) {
-  //       const defaultLoginSuccessMessage = intl.formatMessage({
-  //         id: "pages.login.success",
-  //         defaultMessage: "登录成功！",
-  //       });
-  //       message.success(defaultLoginSuccessMessage);
-  //       await fetchUserInfo({ name: "lishuo" });
-  //       const urlParams = new URL(window.location.href).searchParams;
-  //       history.push(urlParams.get("redirect") || "/");
-  //       ipcRenderer.send("isLogin");
-  //       return;
-  //     }
+  // ipcRenderer.on("login-success", async (event: any, token: string) => {
+  //   if (token) {
+  //     const defaultLoginSuccessMessage = intl.formatMessage({
+  //       id: "pages.login.success",
+  //       defaultMessage: "登录成功！",
+  //     });
+  //     message.success(defaultLoginSuccessMessage);
+  //     await fetchUserInfo({ name: "lishuo" });
+  //     const urlParams = new URL(window.location.href).searchParams;
+  //     history.push(urlParams.get("redirect") || "/");
+  //     ipcRenderer.send("isLogin");
+  //     return;
   //   }
-  // );
+  // });
 
   useEffect(() => {
     initParticlesEngine(async (engine) => {
@@ -79,7 +77,10 @@ const Login: React.FC = () => {
       strings: ["Chat-Electron"],
       typeSpeed: 50,
     });
-    fetchUserInfo({ name: "lishuo" });
+    setInitialState((s) => ({
+      ...s,
+      currentUser: { name: "lishuo" },
+    }));
     history.push("/");
   }, []);
 
@@ -100,6 +101,7 @@ const Login: React.FC = () => {
                   enable: true,
                   mode: "repulse",
                 },
+
                 resize: true,
               },
               modes: {

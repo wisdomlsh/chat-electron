@@ -27,7 +27,7 @@
         "src/.umi/*"
       ],
       "@umijs/max": [
-        "/Users/lishuo/Desktop/lishuo/chat-electron/node_modules/.pnpm/umi@4.2.8_@babel+core@7.24.6_@types+node@20.13.0_@types+react@18.3.3_eslint@8.35.0_jest@29.7._cpp6smmapi2kuvhz4wjvjt22ou/node_modules/umi"
+        "/Users/lishuo/Desktop/lishuo/chat-electron/node_modules/.pnpm/umi@4.2.8_@babel+core@7.4.5_@types+node@20.13.0_@types+react@18.3.3_eslint@8.35.0_jest@29.7.0_wu643mu4qvv5ed6marxuod3oem/node_modules/umi"
       ],
       "@umijs/max/typings": [
         "src/.umi/typings"

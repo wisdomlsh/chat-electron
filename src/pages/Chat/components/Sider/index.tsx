@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { Icon } from "@umijs/max";
-import { IconButton } from "@/common";
+import React, { useState } from "react";
+import { Icon, useModel } from "@umijs/max";
 import { Button, Popover } from "antd";
 
 import styles from "./index.module.less";
+import UserSetting from "@/pages/Chat/components/UserSetting";
 
 interface IProps {}
 
 function Sider(props: IProps) {
   const [isSider, setIsSider] = useState<boolean>(false);
-  const [siderData, setSiderData] = useState<any>([]);
-  const [id, setId] = useState<any>(1);
+  const { chatSession, updateCurrentIndex } = useModel("chat");
 
   const content = (
     <div className="w-full">
@@ -33,20 +32,9 @@ function Sider(props: IProps) {
     setIsSider(true);
   };
 
-  useEffect(() => {
-    setSiderData([
-      {
-        sessionName: "新的聊天",
-        sessionId: 1,
-      },
-      {
-        sessionName: "新的聊天",
-        sessionId: 2,
-      },
-    ]);
-
-    setId(1);
-  }, []);
+  const handleChangeSessionClick = (index: number) => {
+    updateCurrentIndex(index);
+  };
 
   return (
     <div
@@ -62,18 +50,18 @@ function Sider(props: IProps) {
         </div>
         <div className="flex-1 flex flex-col justify-between">
           <div>
-            {siderData.map((v: any) => {
+            {chatSession.sessions.map((v: any, index: number) => {
               return (
                 <div
                   className={`${styles.history_item} ${
-                    id === v.sessionId && styles.history_item_active
+                    chatSession.currentSessionIndex === index &&
+                    styles.history_item_active
                   }`}
-                  key={v.sessionId}
+                  key={v.id}
+                  onClick={() => handleChangeSessionClick(index)}
                 >
                   <a className="block w-full flex justify-between  items-center">
-                    <span className={styles.history_item_name}>
-                      {v.sessionName}
-                    </span>
+                    <span className={styles.history_item_name}>{v.topic}</span>
                     <span>
                       <Popover
                         arrow={false}
@@ -81,7 +69,12 @@ function Sider(props: IProps) {
                         placement="rightTop"
                         content={content}
                       >
-                        <span className={styles.sider_edit}>
+                        <span
+                          className={`${styles.sider_edit} ${
+                            chatSession.currentSessionIndex === index &&
+                            styles.sider_visible
+                          }`}
+                        >
                           <Icon icon="local:edit" />
                         </span>
                       </Popover>
@@ -92,7 +85,7 @@ function Sider(props: IProps) {
             })}
           </div>
 
-          <IconButton text="lisuo" className={styles.sider_user} />
+          <UserSetting />
         </div>
       </div>
     </div>
