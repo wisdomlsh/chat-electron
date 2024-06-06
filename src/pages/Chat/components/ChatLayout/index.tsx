@@ -1,15 +1,11 @@
 import React from "react";
-import { Input } from "antd";
 import Sider from "../Sider";
 import _Chat from "../_Chat";
-
-import { Icon } from "@umijs/max";
 import "@/styles/markdown.less";
 import "@/styles/highlight.less";
 
 import styles from "./index.module.less";
-
-const { TextArea } = Input;
+import FileUploadTextArea from "@/pages/Chat/components/FileUploadTextArea";
 
 const ChatLayout: React.FC = () => {
   return (
@@ -17,16 +13,11 @@ const ChatLayout: React.FC = () => {
       <Sider />
       <div className=" flex flex-1 justify-center bg-white">
         <div
-          className={`flex flex-col h-full w-8/12 relative p-4 bg-white ${styles.chat_body}`}
+          className={`flex flex-col h-full w-full  relative  bg-white ${styles.chat_body}`}
         >
           <_Chat />
           <footer className={styles.footer}>
-            <Icon icon="local:upload" className="pb-1" />
-            <TextArea
-              className={styles.chat_textarea}
-              autoSize={{ minRows: 1, maxRows: 4 }}
-            />
-            <Icon icon="local:send" className="pb-1" />
+            <FileUploadTextArea />
           </footer>
         </div>
       </div>

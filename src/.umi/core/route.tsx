@@ -4,15 +4,16 @@
 import React from 'react';
 
 export async function getRoutes() {
-  const routes = {"1":{"path":"/user","layout":false,"id":"1"},"2":{"name":"login","path":"/user/login","parentId":"1","id":"2"},"3":{"path":"/chat","parentId":"ant-design-pro-layout","id":"3"},"4":{"path":"/","redirect":"/chat","parentId":"ant-design-pro-layout","id":"4"},"5":{"path":"*","layout":false,"id":"5"},"ant-design-pro-layout":{"id":"ant-design-pro-layout","path":"/","isLayout":true},"umi/plugin/openapi":{"path":"/umi/plugin/openapi","id":"umi/plugin/openapi"}} as const;
+  const routes = {"1":{"path":"/user","layout":false,"id":"1"},"2":{"name":"login","path":"/user/login","parentId":"1","id":"2"},"3":{"path":"/chat","name":"Chat","parentId":"ant-design-pro-layout","id":"3"},"4":{"path":"/chat/:id","name":"Chat","parentId":"ant-design-pro-layout","id":"4"},"5":{"path":"/","redirect":"/chat","parentId":"ant-design-pro-layout","id":"5"},"6":{"path":"*","layout":false,"id":"6"},"ant-design-pro-layout":{"id":"ant-design-pro-layout","path":"/","isLayout":true},"umi/plugin/openapi":{"path":"/umi/plugin/openapi","id":"umi/plugin/openapi"}} as const;
   return {
     routes,
     routeComponents: {
 '1': React.lazy(() => import('./EmptyRoute')),
 '2': React.lazy(() => import(/* webpackChunkName: "p__User__Login__index" */'@/pages/User/Login/index.tsx')),
 '3': React.lazy(() => import(/* webpackChunkName: "p__Chat__index" */'@/pages/Chat/index.tsx')),
-'4': React.lazy(() => import('./EmptyRoute')),
-'5': React.lazy(() => import(/* webpackChunkName: "p__404" */'@/pages/404.tsx')),
+'4': React.lazy(() => import(/* webpackChunkName: "p__Chat__index" */'@/pages/Chat/index.tsx')),
+'5': React.lazy(() => import('./EmptyRoute')),
+'6': React.lazy(() => import(/* webpackChunkName: "p__404" */'@/pages/404.tsx')),
 'ant-design-pro-layout': React.lazy(() => import(/* webpackChunkName: "umi__plugin-layout__Layout" */'/Users/lishuo/Desktop/lishuo/chat-electron/src/.umi/plugin-layout/Layout.tsx')),
 'umi/plugin/openapi': React.lazy(() => import(/* webpackChunkName: "umi__plugin-openapi__openapi" */'/Users/lishuo/Desktop/lishuo/chat-electron/src/.umi/plugin-openapi/openapi.tsx')),
 },

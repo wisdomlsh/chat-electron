@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Icon, useModel } from "@umijs/max";
+import { history, Icon, useModel, useParams } from "@umijs/max";
 import { Button, Popover } from "antd";
 
 import styles from "./index.module.less";
@@ -8,8 +8,11 @@ import UserSetting from "@/pages/Chat/components/UserSetting";
 interface IProps {}
 
 function Sider(props: IProps) {
-  const [isSider, setIsSider] = useState<boolean>(false);
+  const params = useParams();
   const { chatSession, updateCurrentIndex } = useModel("chat");
+  const [isSider, setIsSider] = useState<boolean>(false);
+
+  // @ts-ignore
 
   const content = (
     <div className="w-full">
@@ -32,9 +35,14 @@ function Sider(props: IProps) {
     setIsSider(true);
   };
 
-  const handleChangeSessionClick = (index: number) => {
+  const handleChangeSessionClick = (id: string, index: number) => {
+    history.push(`/chat/${id}`);
     updateCurrentIndex(index);
   };
+
+  // useEffect(() => {
+  //
+  // }, []);
 
   return (
     <div
@@ -48,21 +56,20 @@ function Sider(props: IProps) {
             <Icon icon="local:sider" className="w-2" />
           </span>
         </div>
-        <Button type="text" className="flex items-center my-3.5 p-2 gap-2">
-          <Icon icon="local:chat" />
-          <span>ChatGpt</span>
-        </Button>
+        {/*<Button type="text" className="flex items-center my-3.5 p-2 gap-2">*/}
+        {/*  <Icon icon="local:chat" />*/}
+        {/*  <span>ChatGpt</span>*/}
+        {/*</Button>*/}
         <div className="flex-1 flex flex-col justify-between">
           <div>
-            {chatSession.sessions.map((v: any, index: number) => {
+            {chatSession?.sessions?.map((v: any, index: number) => {
               return (
                 <div
                   className={`${styles.history_item} ${
-                    chatSession.currentSessionIndex === index &&
-                    styles.history_item_active
+                    params.id === v.id && styles.history_item_active
                   }`}
                   key={v.id}
-                  onClick={() => handleChangeSessionClick(index)}
+                  onClick={() => handleChangeSessionClick(v.id, index)}
                 >
                   <a className="block w-full flex justify-between  items-center">
                     <span className={styles.history_item_name}>{v.topic}</span>
@@ -75,8 +82,7 @@ function Sider(props: IProps) {
                       >
                         <span
                           className={`${styles.sider_edit} ${
-                            chatSession.currentSessionIndex === index &&
-                            styles.sider_visible
+                            params.id === v.id && styles.sider_visible
                           }`}
                         >
                           <Icon icon="local:edit" />

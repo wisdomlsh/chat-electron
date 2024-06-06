@@ -1,4 +1,7 @@
 import { useCallback, useState } from "react";
+import { setItem } from "@/utils/localStorage";
+
+import ChatGPTApi from "@/services/chat";
 
 export type ChatMessage = {
   date: number;
@@ -16,54 +19,32 @@ export interface ChatSession {
   lastUpdate: number;
 }
 
-function createEmptySession(): ChatSession {
+function createEmptySession(id?: string): ChatSession {
   return {
-    id: window.crypto.randomUUID(),
+    id: id ?? crypto.randomUUID(),
     topic: "新的聊天",
-    messages: [
-      {
-        content: "你好",
-        role: "user",
-        date: Date.now(),
-        streaming: false,
-        id: window.crypto.randomUUID(),
-      },
-      {
-        content: "你好，我是ChatGpt",
-        role: "assistant",
-        date: Date.now(),
-        streaming: false,
-        id: window.crypto.randomUUID(),
-      },
-      {
-        content: "你好，我是ChatGpt",
-        role: "user",
-        date: Date.now(),
-        streaming: false,
-        id: window.crypto.randomUUID(),
-      },
-      {
-        content:
-          '当然，以下是一个简单的JavaScript代码段，用于输出"Hello, World!"到控制台：\n' +
-          "\n" +
-          "```javascript\n" +
-          'console.log("Hello, World!");\n' +
-          "```\n" +
-          "\n" +
-          "希望这段代码对你有帮助。如果你有任何其他的JavaScript代码需求或其他问题，请随时告诉我。我会尽力为你提供帮助。",
-        role: "assistant",
-        date: Date.now(),
-        streaming: false,
-        id: window.crypto.randomUUID(),
-      },
-    ],
+    messages: [],
     lastUpdate: Date.now(),
   };
 }
 
+export function createMessage(override: Partial<ChatMessage>): ChatMessage {
+  return {
+    id: crypto.randomUUID(),
+    date: Date.now(),
+    role: "user",
+    content: "",
+    streaming: false,
+    ...override,
+  };
+}
+
 export default () => {
-  const DEFAULT_CHAT_STATE = {
-    sessions: [createEmptySession(), createEmptySession()],
+  const DEFAULT_CHAT_STATE: {
+    sessions: ChatSession[];
+    currentSessionIndex: number;
+  } = {
+    sessions: [createEmptySession()],
     currentSessionIndex: 0,
   };
 
@@ -73,7 +54,7 @@ export default () => {
   // 获取当前的session
   const getCurrentSession = useCallback(() => {
     return chatSession.sessions[chatSession.currentSessionIndex];
-  }, []);
+  }, [chatSession.currentSessionIndex]);
 
   // 获取当前选中的session
   const getCurrentIndex = useCallback(() => {
@@ -86,11 +67,112 @@ export default () => {
       return { ...pre, currentSessionIndex: index };
     });
   };
+
+  const updateCurrentSession = (updater: (session: any) => void) => {
+    const currentSession = getCurrentSession();
+    updater(currentSession);
+    const data = chatSession.sessions.filter(
+      (v) => v?.id !== currentSession?.id
+    );
+    setChatSession((pre) => {
+      setItem(
+        "chat",
+        JSON.stringify({ ...pre, sessions: [currentSession, ...data] })
+      );
+      return { ...pre, sessions: [currentSession, ...data] };
+    });
+  };
+
+  const addSession = () => {
+    const data = createEmptySession();
+    setChatSession((pre) => {
+      return { ...pre, sessions: [...pre.sessions, data] };
+    });
+  };
+
+  const fetchUserInput = async (content: string) => {
+    const userMessage: ChatMessage = createMessage({
+      role: "user",
+      content: content,
+    });
+
+    const botMessage: ChatMessage = createMessage({
+      role: "assistant",
+      streaming: true,
+    });
+
+    // 保存用户和机器人的消息
+    updateCurrentSession((session) => {
+      const savedUserMessage = {
+        ...userMessage,
+      };
+      session.messages = session.messages.concat([
+        savedUserMessage,
+        botMessage,
+      ]);
+    });
+
+    const api = new ChatGPTApi();
+
+    api.chat({
+      config: {
+        model: "gpt-3.5-turbo-16k",
+        messages: [
+          {
+            role: "user",
+            content: content,
+          },
+        ],
+      },
+      onUpdate(message) {
+        if (message.length) {
+          botMessage.content = message;
+        }
+
+        updateCurrentSession((session) => {
+          session.messages = session.messages.concat();
+        });
+      },
+      onFinish(message) {
+        //结束
+        botMessage.streaming = false;
+        if (message) {
+          botMessage.content = message;
+        }
+        updateCurrentSession((session) => {
+          session.messages = session.messages.concat();
+        });
+      },
+      // onError(error) {
+      //   const isAborted = error.message.includes("aborted");
+      //   if (isAborted) return;
+      //   botMessage.content = [{ type: "text", context: error.message }];
+      //   botMessage.streaming = false;
+      //   userMessage.isError = !isAborted;
+      //   botMessage.isError = !isAborted;
+      //   get().updateCurrentSession((session) => {
+      //     session.messages = session.messages.concat();
+      //   });
+      //   ChatControllerPool.remove(session.id, botMessage.id ?? messageIndex);
+      // },
+      // onController(controller) {
+      //   // collect controller for stop/retry
+      //   ChatControllerPool.addController(
+      //     session.id,
+      //     botMessage.id ?? messageIndex,
+      //     controller
+      //   );
+      // },
+    });
+  };
+
   return {
     chatSession,
     setChatSession,
     getCurrentSession,
     getCurrentIndex,
     updateCurrentIndex,
+    fetchUserInput,
+    addSession,
   };
 };

@@ -8,6 +8,7 @@ import React, { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import mermaid from "mermaid";
 import { useDebouncedCallback } from "use-debounce";
 import CopyBtn from "@/components/CopyBtn";
+import styles from "./index.less";
 
 export function Mermaid(props: { code: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -24,7 +25,6 @@ export function Mermaid(props: { code: string }) {
           setHasError(true);
         });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.code]);
 
   function viewSvgInNewWindow() {
@@ -32,7 +32,6 @@ export function Mermaid(props: { code: string }) {
     if (!svg) return;
     const text = new XMLSerializer().serializeToString(svg);
     const blob = new Blob([text], { type: "image/svg+xml" });
-    // showImageModal(URL.createObjectURL(blob));
   }
 
   if (hasError) {
@@ -79,7 +78,6 @@ export function PreCode(props: { children: any }) {
       const langMatch = className.match(/language-(\w+)/);
       setLanguage(langMatch ? langMatch[1] : "plaintext");
     }
-    console.log(ref.current);
   }, []);
 
   return (
@@ -90,17 +88,8 @@ export function PreCode(props: { children: any }) {
       <pre ref={ref}>
         <CopyBtn
           language={language}
-          text={ref.current?.children[1]?.innerText}
+          text={ref.current?.children[1]!.innerText}
         />
-        {/*<span*/}
-        {/*  className="copy-code-button"*/}
-        {/*  onClick={() => {*/}
-        {/*    if (ref.current) {*/}
-        {/*      const code = ref.current.innerText;*/}
-        {/*      // copyToClipboard(code);*/}
-        {/*    }*/}
-        {/*  }}*/}
-        {/*></span>*/}
         {props.children}
       </pre>
     </>
@@ -198,7 +187,11 @@ export default function Markdown(
       onDoubleClickCapture={props.onDoubleClickCapture}
       dir="auto"
     >
-      <MarkdownContent content={props.content} />
+      {props.loading ? (
+        <div className={styles.loading}></div>
+      ) : (
+        <MarkdownContent content={props.content} />
+      )}
     </div>
   );
 }

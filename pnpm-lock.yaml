@@ -59,6 +59,9 @@ importers:
       react-markdown:
         specifier: ^9.0.1
         version: 9.0.1(@types/react@18.3.3)(react@18.3.1)
+      redux-persist:
+        specifier: ^6.0.0
+        version: 6.0.0(react@18.3.1)(redux@4.2.1)
       rehype-highlight:
         specifier: ^7.0.0
         version: 7.0.0
@@ -102,6 +105,9 @@ importers:
       '@babel/preset-typescript':
         specifier: ^7.24.6
         version: 7.24.6(@babel/core@7.4.5)
+      '@fortaine/fetch-event-source':
+        specifier: ^3.0.6
+        version: 3.0.6
       '@svgr/webpack':
         specifier: ^8.1.0
         version: 8.1.0(typescript@5.4.5)
@@ -1893,6 +1899,10 @@ packages:
   '@formatjs/intl-utils@2.3.0':
     resolution: {integrity: sha512-KWk80UPIzPmUg+P0rKh6TqspRw0G6eux1PuJr+zz47ftMaZ9QDwbGzHZbtzWkl5hgayM/qrKRutllRC7D/vVXQ==}
     deprecated: the package is rather renamed to @formatjs/ecma-abstract with some changes in functionality (primarily selectUnit is removed and we don't plan to make any further changes to this package
+
+  '@fortaine/fetch-event-source@3.0.6':
+    resolution: {integrity: sha512-621GAuLMvKtyZQ3IA6nlDWhV1V/7PGOTNIGLUifxt0KzM+dZIweJ6F3XvQF3QnqeNfS1N7WQ0Kil1Di/lhChEw==}
+    engines: {node: '>=16.15'}
 
   '@gar/promisify@1.1.3':
     resolution: {integrity: sha512-k2Ty1JcVojjJFwrg/ThKi2ujJ7XNLYaFGNB/bWT9wGR+oSMJHMa5w+CUq6p/pVrKeNNgA7pCqEcjSnHVoqJQFw==}
@@ -9795,6 +9805,15 @@ packages:
   reduce-css-calc@2.1.8:
     resolution: {integrity: sha512-8liAVezDmUcH+tdzoEGrhfbGcP7nOV4NkGE3a74+qqvE7nt9i4sKLGBuZNOnpI4WiGksiNPklZxva80061QiPg==}
 
+  redux-persist@6.0.0:
+    resolution: {integrity: sha512-71LLMbUq2r02ng2We9S215LtPu3fY0KgaGE0k8WRgl6RkqxtGfl7HUozz1Dftwsb0D/5mZ8dwAaPbtnzfvbEwQ==}
+    peerDependencies:
+      react: '>=16'
+      redux: '>4.0.0'
+    peerDependenciesMeta:
+      react:
+        optional: true
+
   redux-saga@0.16.2:
     resolution: {integrity: sha512-iIjKnRThI5sKPEASpUvySemjzwqwI13e3qP7oLub+FycCRDysLSAOwt958niZW6LhxfmS6Qm1BzbU70w/Koc4w==}
 
@@ -14543,6 +14562,8 @@ snapshots:
       '@formatjs/intl-utils': 2.3.0
 
   '@formatjs/intl-utils@2.3.0': {}
+
+  '@fortaine/fetch-event-source@3.0.6': {}
 
   '@gar/promisify@1.1.3': {}
 
@@ -25788,6 +25809,12 @@ snapshots:
     dependencies:
       css-unit-converter: 1.1.2
       postcss-value-parser: 3.3.1
+
+  redux-persist@6.0.0(react@18.3.1)(redux@4.2.1):
+    dependencies:
+      redux: 4.2.1
+    optionalDependencies:
+      react: 18.3.1
 
   redux-saga@0.16.2: {}
 

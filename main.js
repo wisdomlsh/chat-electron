@@ -1,7 +1,9 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const { google } = require("googleapis");
 const path = require("path");
 const fs = require("fs");
+
+const isMac = process.platform === "darwin";
 
 let mainWindow;
 let authWindow;
@@ -17,6 +19,8 @@ const REDIRECT_URI = "http://localhost:8000";
 
 // 创建主进程
 function createMainWindow() {
+  const menu = new Menu();
+
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -43,8 +47,25 @@ function createMainWindow() {
     mainWindow.setMaximizable(true);
   });
 
-  // 加载存储的令牌
-  // loadToken();
+  // main
+  ipcMain.on("show-context-menu", (event) => {
+    const template = [
+      {
+        label: "设置         command+,",
+        click: () => {
+          event.sender.send("context-menu-command", "menu-item-1");
+        },
+      },
+      {
+        label: "注销",
+        click: () => {
+          event.sender.send("context-menu-command", "menu-item-1");
+        },
+      },
+    ];
+    const menu = Menu.buildFromTemplate(template);
+    menu.popup({ window: BrowserWindow.fromWebContents(event.sender) });
+  });
 }
 
 // 创建登陆跳转窗口
@@ -92,38 +113,7 @@ function handleCallback(event, url) {
 }
 
 function exchangeCodeForToken(code) {
-  // const oauth2Client = new google.auth.OAuth2(
-  //   CLIENT_ID,
-  //   CLIENT_SECRET,
-  //   REDIRECT_URI
-  // );
-  //
-  // console.log()
-  // oauth2Client.getToken(code, (err, token) => {
-  //   console.log(code, "code");
-  //   if (err) {
-  //     console.error("Error getting token", err);
-  //     return;
-  //   }
-  //   oauth2Client.setCredentials(token);
-  // saveToken(token);
-
   mainWindow.webContents.send("login-success", code);
-  // });
-}
-
-function saveToken(token) {
-  console.log(TOKEN_PATH);
-  fs.writeFile(TOKEN_PATH, JSON.stringify(token), (err) => {
-    if (err) console.error("Error saving token", err);
-  });
-}
-
-function loadToken() {
-  // fs.readFile(TOKEN_PATH, (err, token) => {
-  //   if (err) return;
-  //   mainWindow.webContents.send("login-success", JSON.parse(token));
-  // });
 }
 
 app.whenReady().then(() => {
