@@ -19,7 +19,7 @@ function CopyBtn(props: IProps) {
   return (
     <>
       <div
-        className={`${styles.surface_secondary} flex items-center relative   px-4 py-2 text-xs  justify-between`}
+        className={`${styles.surface_secondary} flex items-center relative  w-full  px-4 py-2 text-xs  justify-between`}
       >
         <span>{language}</span>
         <div className="flex items-center">

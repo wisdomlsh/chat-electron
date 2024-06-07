@@ -15,7 +15,8 @@ export default {
     // localhost:8000/api/** -> https://preview.pro.ant.design/api/**
     "/api/": {
       // 要代理的地址
-      target: "https://api.openai-proxy.com",
+      // target: "https://api.openai-proxy.com",
+      target: "https://app.nextchat.dev/api/openai",
       changeOrigin: true,
       pathRewrite: { "^/api": "" },
     },

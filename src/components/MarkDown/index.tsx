@@ -73,12 +73,13 @@ export function PreCode(props: { children: any }) {
   }, [refText]);
 
   useEffect(() => {
-    if (ref.current) {
-      const className = ref.current.querySelector("code")?.className || "";
-      const langMatch = className.match(/language-(\w+)/);
+    if (props.children) {
+      const className = props.children?.props?.className;
+      const langMatch = className?.match(/language-(\w+)/);
+
       setLanguage(langMatch ? langMatch[1] : "plaintext");
     }
-  }, []);
+  }, [props.children]);
 
   return (
     <>
@@ -187,11 +188,8 @@ export default function Markdown(
       onDoubleClickCapture={props.onDoubleClickCapture}
       dir="auto"
     >
-      {props.loading ? (
-        <div className={styles.loading}></div>
-      ) : (
-        <MarkdownContent content={props.content} />
-      )}
+      <MarkdownContent content={props.content} />
+      {props.loading ? <div className={styles.loading}></div> : null}
     </div>
   );
 }

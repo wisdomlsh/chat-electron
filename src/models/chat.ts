@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { setItem } from "@/utils/localStorage";
+import { getItem, setItem } from "@/utils/localStorage";
 
 import ChatGPTApi from "@/services/chat";
 
@@ -43,10 +43,7 @@ export default () => {
   const DEFAULT_CHAT_STATE: {
     sessions: ChatSession[];
     currentSessionIndex: number;
-  } = {
-    sessions: [createEmptySession()],
-    currentSessionIndex: 0,
-  };
+  } = getItem("chat");
 
   //  当前会话的所有信息
   const [chatSession, setChatSession] = useState(DEFAULT_CHAT_STATE);

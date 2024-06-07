@@ -7,7 +7,7 @@ import './index.css';
 
 const alias = {};
 type AliasKeys = keyof typeof alias;
-const localIcons = ["chat","copy","delete","edit","logo","rename","right","send","share","sider","upload"] as const;
+const localIcons = ["add","chat","copy","delete","edit","explore","logo","rename","right","send","share","sider","upload"] as const;
 type LocalIconsKeys = typeof localIcons[number];
 
 type IconCollections = 'academicons' |

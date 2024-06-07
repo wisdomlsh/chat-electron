@@ -45,7 +45,11 @@ function _Chat(props: IProps) {
                         {/*</div>*/}
                         {/*显示问题和答案*/}
                         <Markdown
-                          loading={message.streaming}
+                          loading={
+                            message.streaming &&
+                            message.content.length === 0 &&
+                            !isUser
+                          }
                           content={message.content}
                           // onContextMenu={(e) => onRightClick(e, message)}
                           // onDoubleClickCapture={() => {

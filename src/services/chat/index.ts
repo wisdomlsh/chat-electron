@@ -23,6 +23,7 @@ class ChatGPTApi implements LLMApi {
     try {
       // 动画响应，使其看起来平滑
       function animateResponseText() {
+        console.log(12);
         if (finished || controller.signal.aborted) {
           if (responseText?.length === 0) {
             options.onError?.(new Error("empty response from server"));
@@ -55,57 +56,51 @@ class ChatGPTApi implements LLMApi {
       };
       controller.signal.onabort = finish;
 
-      fetchEventSource("/api/v1/chat/completions", {
-        ...chatPayload,
-        async onopen(res) {
-          const contentType = res.headers.get("content-type");
+      fetchEventSource(
+        "https://app.nextchat.dev/api/openai/v1/chat/completions",
+        {
+          ...chatPayload,
+          async onopen(res) {
+            const contentType = res.headers.get("content-type");
 
-          if (contentType?.startsWith("text/plain")) {
-            return finish();
-          }
-        },
-        onmessage(msg) {
-          if (msg.data === "[DONE]" || finished) {
-            return finish();
-          }
-          const text = msg.data;
-
-          try {
-            const json = JSON.parse(text);
-            const choices = json.choices as {
-              delta: { content: string };
-            }[];
-            const delta = choices[0]?.delta?.content;
-
-            if (delta) {
-              remainText += delta;
+            if (contentType?.startsWith("text/plain")) {
+              return finish();
             }
-          } catch (e) {
-            console.error("[Request] parse error", text, msg);
-          }
-        },
-        onclose() {
-          finish();
-        },
-        onerror(e) {
-          options.onError?.(e);
-          throw e;
-        },
-        openWhenHidden: true,
-      });
+          },
+          onmessage(msg) {
+            // if (msg.data === "[DONE]" || finished) {
+            //   return finish();
+            // }
+            const text = msg.data;
+
+            try {
+              const json = JSON.parse(text);
+              const choices = json.choices as {
+                delta: { content: string };
+              }[];
+              const delta = choices[0]?.delta?.content;
+              if (delta) {
+                remainText += delta;
+              }
+            } catch (e) {
+              console.error("[Request] parse error", text, msg);
+            }
+          },
+          onclose() {
+            finish();
+          },
+          onerror(e) {
+            options.onError?.(e);
+            throw e;
+          },
+          openWhenHidden: true,
+        }
+      );
     } catch (e) {
       finished = true;
       options.onError?.(e as Error);
     }
   }
 }
-
-// export class ClientApi {
-//   public llm: LLMApi;
-//
-//   constructor(provider: ModelProvider = ModelProvider.GPT) {
-//     this.llm = new ChatGPTApi();
-//   }
-// }
 
 export default ChatGPTApi;

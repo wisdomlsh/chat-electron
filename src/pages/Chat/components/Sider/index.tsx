@@ -1,17 +1,17 @@
 import React, { useState } from "react";
-import { history, Icon, useModel, useParams } from "@umijs/max";
+import { history, Icon, useLocation, useModel } from "@umijs/max";
 import { Button, Popover } from "antd";
 
 import styles from "./index.module.less";
-import UserSetting from "@/pages/Chat/components/UserSetting";
 
 interface IProps {}
 
 function Sider(props: IProps) {
-  const params = useParams();
+  const location = useLocation();
   const { chatSession, updateCurrentIndex } = useModel("chat");
   const [isSider, setIsSider] = useState<boolean>(false);
-
+  const queryParams = new URLSearchParams(location.search);
+  const sessionId = queryParams.get("id");
   // @ts-ignore
 
   const content = (
@@ -31,18 +31,15 @@ function Sider(props: IProps) {
     </div>
   );
 
-  const handleSiderClick = () => {
+  const handleSiderClick = (e: { stopPropagation: () => void }) => {
     setIsSider(true);
+    e.stopPropagation();
   };
 
   const handleChangeSessionClick = (id: string, index: number) => {
-    history.push(`/chat/${id}`);
+    history.push(`/chat?id=${id}`);
     updateCurrentIndex(index);
   };
-
-  // useEffect(() => {
-  //
-  // }, []);
 
   return (
     <div
@@ -51,27 +48,32 @@ function Sider(props: IProps) {
       }`}
     >
       <div className="p-3 flex flex-col h-full">
-        <div className="h-14 flex items-center cursor-pointer p-2">
+        <div className="h-14 flex items-center justify-between  p-2">
           <span onClick={handleSiderClick}>
             <Icon icon="local:sider" className="w-2" />
           </span>
+          <span onClick={handleSiderClick}>
+            <Icon icon="local:add" className="w-2" />
+          </span>
         </div>
-        {/*<Button type="text" className="flex items-center my-3.5 p-2 gap-2">*/}
-        {/*  <Icon icon="local:chat" />*/}
-        {/*  <span>ChatGpt</span>*/}
-        {/*</Button>*/}
+        <div className="mb-3 p-0">
+          <Button type="text" className={styles.sider_explore_btn}>
+            <Icon icon="local:explore" />
+            探索ChatGpt
+          </Button>
+        </div>
         <div className="flex-1 flex flex-col justify-between">
           <div>
             {chatSession?.sessions?.map((v: any, index: number) => {
               return (
                 <div
                   className={`${styles.history_item} ${
-                    params.id === v.id && styles.history_item_active
+                    sessionId === v.id && styles.history_item_active
                   }`}
                   key={v.id}
                   onClick={() => handleChangeSessionClick(v.id, index)}
                 >
-                  <a className="block w-full flex justify-between  items-center">
+                  <a className=" w-full flex justify-between  items-center">
                     <span className={styles.history_item_name}>{v.topic}</span>
                     <span>
                       <Popover
@@ -82,7 +84,7 @@ function Sider(props: IProps) {
                       >
                         <span
                           className={`${styles.sider_edit} ${
-                            params.id === v.id && styles.sider_visible
+                            sessionId === v.id && styles.sider_visible
                           }`}
                         >
                           <Icon icon="local:edit" />
@@ -95,7 +97,7 @@ function Sider(props: IProps) {
             })}
           </div>
 
-          <UserSetting />
+          {/*<UserSetting />*/}
         </div>
       </div>
     </div>
