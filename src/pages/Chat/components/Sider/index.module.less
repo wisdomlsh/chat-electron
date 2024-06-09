@@ -22,24 +22,25 @@
 
 
 .sider_edit {
+  width: 28px;
   visibility: hidden;
-}
+  display: flex;
+  align-items: center;
 
+}
 
 
 .history_item {
   width: 100%;
   cursor: pointer;
-  padding: .5rem;
-  padding-left: 0.75rem;
   border-radius: .5rem;
-
 
 
   &:hover .sider_edit {
     visibility: visible;
   }
-  &:hover  {
+
+  &:hover {
     background: #ececec;
   }
 
@@ -49,10 +50,11 @@
   }
 
   &_name {
-    width: 175px;
+    flex: 1;
     white-space: normal;
     overflow: hidden;
     text-overflow: ellipsis;
+    padding: 0.5rem;
   }
 }
 
@@ -65,6 +67,12 @@
   align-items: center;
   gap: 12px;
 
+}
+
+.delete {
+  &:hover {
+    color: #f93a37 !important;
+  }
 }
 
 @media (max-width: 900px) {

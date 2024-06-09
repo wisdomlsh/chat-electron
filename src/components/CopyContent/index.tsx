@@ -2,15 +2,23 @@ import React from "react";
 import { useCopyClick } from "@/hooks";
 import { Icon } from "@umijs/max";
 
-import styles from "./index.modules.less";
-
 interface IProps {
-  language: string;
+  language?: string;
   text: string;
+  children: React.ReactNode;
+  isShowText?: boolean;
+  className?: string;
+  iconClassName?: string;
 }
 
-function CopyBtn(props: IProps) {
-  const { language, text = "" } = props;
+function CopyContent(props: IProps) {
+  const {
+    language,
+    text = "",
+    iconClassName,
+    isShowText = true,
+    className,
+  } = props;
   const {
     copied,
     copyLoading,
@@ -19,23 +27,23 @@ function CopyBtn(props: IProps) {
   return (
     <>
       <div
-        className={`${styles.surface_secondary} flex items-center relative  w-full  px-4 py-2 text-xs  justify-between`}
+        className={`${className} flex items-center relative  w-full   text-xs  justify-between`}
       >
         <span>{language}</span>
         <div className="flex items-center">
           <span data-state="closed">
             {copied ? (
               <span className="flex gap-1 items-center">
-                <Icon icon="local:right" />
-                <span>已复制！</span>
+                <Icon icon="local:right" className={iconClassName} />
+                {isShowText ? <span>已复制！</span> : null}
               </span>
             ) : (
               <button
                 className=" flex gap-1 items-center"
                 onClick={onCopyClick}
               >
-                <Icon icon="local:copy" />
-                <span>复制代码</span>
+                {props.children}
+                {isShowText ? <span>复制代码</span> : null}
               </button>
             )}
           </span>
@@ -45,4 +53,4 @@ function CopyBtn(props: IProps) {
   );
 }
 
-export default CopyBtn;
+export default CopyContent;

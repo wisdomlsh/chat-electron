@@ -81,7 +81,7 @@ const Login: React.FC = () => {
       ...s,
       currentUser: { name: "lishuo" },
     }));
-    history.push("/");
+    history.push("/chat");
   }, []);
 
   return (

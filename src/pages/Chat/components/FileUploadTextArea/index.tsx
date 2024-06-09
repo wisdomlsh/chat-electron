@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Icon, useModel } from "@umijs/max";
 import { Input } from "antd";
+import ChatControllerPool from "@/services/chat/controller";
+
 import styles from "./index.module.less";
 
 const { TextArea } = Input;
@@ -8,9 +10,11 @@ const { TextArea } = Input;
 interface IProps {}
 
 function FileUploadTextArea(props: IProps) {
-  const { fetchUserInput, addSession, chatSession } = useModel("chat");
+  const { fetchUserInput } = useModel("chat");
   const [userInput, setUserInput] = useState<string>("");
-
+  const [isStop, setIsStop] = useState<boolean>(
+    ChatControllerPool.hasPending()
+  );
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value: string = e.target.value;
     setUserInput(value);
@@ -24,9 +28,17 @@ function FileUploadTextArea(props: IProps) {
     }
   };
 
+  const handleStopClick = () => {
+    ChatControllerPool.stopAll();
+  };
+
+  useEffect(() => {
+    setIsStop(ChatControllerPool.hasPending());
+  }, [ChatControllerPool.hasPending()]);
+
   return (
     <div className={styles.text_footer}>
-      <Icon icon="local:upload" className="flex items-center" />
+      <Icon icon="local:upload" className="flex items-end mb-1" />
       <TextArea
         value={userInput}
         className={styles.chat_textarea}
@@ -34,7 +46,18 @@ function FileUploadTextArea(props: IProps) {
         onKeyDown={handleKeyDownClick}
         onInput={handleInput}
       />
-      <Icon icon="local:send" className="flex items-center" />
+      {isStop ? (
+        <Icon
+          icon="local:stop"
+          className="flex items-end mb-1 cursor-pointer"
+          onClick={handleStopClick}
+        />
+      ) : (
+        <Icon
+          icon="local:send"
+          className="flex items-end mb-1 cursor-pointer"
+        />
+      )}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { join } from "path";
 import defaultSettings from "./defaultSettings";
 import proxy from "./proxy";
 import routes from "./routes";
+import { codeInspectorPlugin } from "code-inspector-plugin";
 
 const { REACT_APP_ENV = "dev" } = process.env;
 
@@ -156,4 +157,11 @@ export default defineConfig({
   requestRecord: {},
   extraPostCSSPlugins: [require("tailwindcss")],
   icons: {},
+  chainWebpack(memo) {
+    memo.plugin("code-inspector-plugin").use(
+      codeInspectorPlugin({
+        bundler: "webpack",
+      })
+    );
+  },
 });

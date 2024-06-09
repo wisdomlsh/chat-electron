@@ -99,6 +99,7 @@
     "@umijs/fabric": "^2.14.1",
     "@umijs/lint": "^4.1.1",
     "@umijs/max": "^4.1.1",
+    "code-inspector-plugin": "^0.14.1",
     "copy-to-clipboard": "^3.3.3",
     "cross-env": "^7.0.3",
     "electron": "^30.0.9",

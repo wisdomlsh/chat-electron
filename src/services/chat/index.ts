@@ -21,9 +21,7 @@ class ChatGPTApi implements LLMApi {
     };
 
     try {
-      // 动画响应，使其看起来平滑
       function animateResponseText() {
-        console.log(12);
         if (finished || controller.signal.aborted) {
           if (responseText?.length === 0) {
             options.onError?.(new Error("empty response from server"));

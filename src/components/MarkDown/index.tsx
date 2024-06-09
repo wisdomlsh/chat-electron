@@ -3,11 +3,13 @@ import RemarkMath from "remark-math";
 import RemarkBreaks from "remark-breaks";
 import RehypeKatex from "rehype-katex";
 import RemarkGfm from "remark-gfm";
+import { Icon } from "@umijs/max";
+
 import RehypeHighlight from "rehype-highlight";
 import React, { RefObject, useEffect, useMemo, useRef, useState } from "react";
 import mermaid from "mermaid";
 import { useDebouncedCallback } from "use-debounce";
-import CopyBtn from "@/components/CopyBtn";
+import CopyContent from "@/components/CopyContent";
 import styles from "./index.less";
 
 export function Mermaid(props: { code: string }) {
@@ -87,10 +89,14 @@ export function PreCode(props: { children: any }) {
         <Mermaid code={mermaidCode} key={mermaidCode} />
       )}
       <pre ref={ref}>
-        <CopyBtn
+        <CopyContent
+          className={styles.surface_secondary}
           language={language}
+          iconClassName="text-[#cbd2ea]"
           text={ref.current?.children[1]!.innerText}
-        />
+        >
+          <Icon icon="local:copy" />
+        </CopyContent>
         {props.children}
       </pre>
     </>

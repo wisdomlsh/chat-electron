@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { getItem, setItem } from "@/utils/localStorage";
+import ChatControllerPool from "@/services/chat/controller";
 
 import ChatGPTApi from "@/services/chat";
 
@@ -19,7 +20,7 @@ export interface ChatSession {
   lastUpdate: number;
 }
 
-function createEmptySession(id?: string): ChatSession {
+export function createEmptySession(id?: string): ChatSession {
   return {
     id: id ?? crypto.randomUUID(),
     topic: "新的聊天",
@@ -42,52 +43,88 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
 export default () => {
   const DEFAULT_CHAT_STATE: {
     sessions: ChatSession[];
-    currentSessionIndex: number;
-  } = getItem("chat");
+    currentSessionId: string;
+  } = getItem("chat") ?? {
+    currentSessionId: "",
+    sessions: [createEmptySession()],
+  };
 
   //  当前会话的所有信息
   const [chatSession, setChatSession] = useState(DEFAULT_CHAT_STATE);
 
-  // 获取当前的session
-  const getCurrentSession = useCallback(() => {
-    return chatSession.sessions[chatSession.currentSessionIndex];
-  }, [chatSession.currentSessionIndex]);
+  const recordState = () => {
+    setItem("chat", JSON.stringify(chatSession));
+  };
 
-  // 获取当前选中的session
-  const getCurrentIndex = useCallback(() => {
-    return chatSession.currentSessionIndex;
-  }, []);
+  // 获取当前的session
+  const getCurrentSession = (id?: string | null) => {
+    if (!id) return;
+    return chatSession.sessions.filter((v) => v.id === id)[0];
+  };
+
+  // 获取当前选中的sessionId
+  const getCurrentId = () => {
+    return chatSession.currentSessionId;
+  };
 
   // 修改当前的session的index
-  const updateCurrentIndex = (index: number) => {
-    setChatSession((pre) => {
-      return { ...pre, currentSessionIndex: index };
-    });
+  const updateCurrentId = (id: string) => {
+    chatSession.currentSessionId = id;
+    recordState();
+    setChatSession(chatSession);
   };
 
   const updateCurrentSession = (updater: (session: any) => void) => {
-    const currentSession = getCurrentSession();
+    const sessionId = getCurrentId();
+    const currentSession = chatSession.sessions?.filter(
+      (v) => v.id === sessionId
+    )[0];
+
     updater(currentSession);
     const data = chatSession.sessions.filter(
       (v) => v?.id !== currentSession?.id
     );
+    recordState();
     setChatSession((pre) => {
-      setItem(
-        "chat",
-        JSON.stringify({ ...pre, sessions: [currentSession, ...data] })
-      );
-      return { ...pre, sessions: [currentSession, ...data] };
+      return { ...pre, sessions: chatSession.sessions };
     });
   };
 
   const addSession = () => {
     const data = createEmptySession();
-    setChatSession((pre) => {
-      return { ...pre, sessions: [...pre.sessions, data] };
+    chatSession.sessions.unshift(data);
+    recordState();
+    setChatSession(chatSession);
+  };
+
+  const deleteSession = (id: string) => {
+    chatSession.sessions = chatSession.sessions.filter((v) => v.id !== id);
+    recordState();
+    setChatSession(chatSession);
+  };
+
+  // 第一次进入页面，所有的straming全部设为false
+
+  const stopAllSteaming = () => {
+    chatSession.sessions.forEach((v) => {
+      v.messages.forEach((item) => (item.streaming = false));
     });
+    recordState();
+    setChatSession(chatSession);
   };
 
   const fetchUserInput = async (content: string) => {
+    // if (!chatSession.currentSessionId) {
+    //   const id = crypto.randomUUID();
+    //   flushSync(() => {
+    //     setChatSession((pre) => {
+    //       return {
+    //         currentSessionId: id,
+    //         sessions: [createEmptySession(id), ...pre.sessions],
+    //       };
+    //     });
+    //   });
+    // }
     const userMessage: ChatMessage = createMessage({
       role: "user",
       content: content,
@@ -98,7 +135,9 @@ export default () => {
       streaming: true,
     });
 
-    // 保存用户和机器人的消息
+    // const messageIndex = getCurrentSession().messages.length + 1;
+
+    // // 保存用户和机器人的消息
     updateCurrentSession((session) => {
       const savedUserMessage = {
         ...userMessage,
@@ -139,27 +178,28 @@ export default () => {
         updateCurrentSession((session) => {
           session.messages = session.messages.concat();
         });
+        ChatControllerPool.remove(chatSession.currentSessionId, botMessage.id);
       },
-      // onError(error) {
-      //   const isAborted = error.message.includes("aborted");
-      //   if (isAborted) return;
-      //   botMessage.content = [{ type: "text", context: error.message }];
-      //   botMessage.streaming = false;
-      //   userMessage.isError = !isAborted;
-      //   botMessage.isError = !isAborted;
-      //   get().updateCurrentSession((session) => {
-      //     session.messages = session.messages.concat();
-      //   });
-      //   ChatControllerPool.remove(session.id, botMessage.id ?? messageIndex);
-      // },
-      // onController(controller) {
-      //   // collect controller for stop/retry
-      //   ChatControllerPool.addController(
-      //     session.id,
-      //     botMessage.id ?? messageIndex,
-      //     controller
-      //   );
-      // },
+      onError(error) {
+        const isAborted = error.message.includes("aborted");
+        if (isAborted) return;
+        botMessage.content = error;
+        botMessage.streaming = false;
+        // userMessage.isError = !isAborted;
+        // botMessage.isError = !isAborted;
+        updateCurrentSession((session) => {
+          session.messages = session.messages.concat();
+        });
+        ChatControllerPool.remove(chatSession.currentSessionId, botMessage.id);
+      },
+      onController(controller) {
+        // collect controller for stop/retry
+        ChatControllerPool.addController(
+          chatSession.currentSessionId,
+          botMessage.id,
+          controller
+        );
+      },
     });
   };
 
@@ -167,9 +207,12 @@ export default () => {
     chatSession,
     setChatSession,
     getCurrentSession,
-    getCurrentIndex,
-    updateCurrentIndex,
+    getCurrentId,
+    updateCurrentId,
     fetchUserInput,
     addSession,
+    deleteSession,
+    stopAllSteaming,
+    updateCurrentSession,
   };
 };
